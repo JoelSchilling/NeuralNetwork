@@ -1,0 +1,42 @@
+import java.math.*;
+
+
+public class Node {
+
+	private double weight;
+	private double bias;
+	
+	private double total;
+	private double numCalc;
+	
+	public Node() {
+		
+		weight = Math.random();
+		bias = Math.random();
+		
+		total = 0;
+		
+	}
+	
+	public void evaluate(double input) {
+		
+		total += (weight * input) + bias;
+		numCalc++;
+		
+	}
+	
+	public double output() {
+		double calc = total / numCalc;
+		
+		total = 0.0;
+		numCalc = 0.0;
+		
+		if(calc > 0.5) {
+			return 1.0;
+		}
+		else {
+			return 0.0;
+		}
+	}
+	
+}

@@ -1,0 +1,86 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		Network network = new Network(3, 1, 3, 100, 1.0);
+		
+		File testData = new File("CharacterInputs.txt");
+		
+		try {
+			Scanner count = new Scanner(testData);
+			Scanner inputs = count;
+			
+			int numInputs = 0;
+			
+			while(count.hasNextLine()) {
+				
+				count.nextLine();
+				numInputs++;
+				
+			}
+			
+			double[][] inputArray = new double[numInputs][1];
+			double[][] expected = new double[numInputs][2];
+			
+			for(int i = 0; i < numInputs; i++) {
+				char character = count.nextLine().charAt(0);
+				
+				double[] name = {0.0, 0.0, 0.0};
+				
+				if((int)character > 60) {
+					name[2] = 0.0;
+					
+					if(character == 'y') {
+						name[0] = 1.0;
+						name[1] = 1.0;
+					}
+					else {
+						
+						if(character == 'a' || character == 'e' || character == 'i' || character == 'o' || character == 'u') {
+							 name[0] = 1.0;
+						 }
+						 else {
+							 name[1] = 1.0;
+						 }
+					}
+				}
+				else {
+					name[2] = 1.0;
+					if(character == 'Y') {
+						name[0] = 1.0;
+						name[1] = 1.0;
+					}
+					else {
+						if(character == 'A' || character == 'E' || character == 'I' || character == 'O' || character == 'U') {
+							name[0] = 1.0;
+						}
+						else {
+							name[1] = 1.0;
+						}
+					}
+				}
+				
+				inputArray[i][0] = (double)((int)character);
+				expected[i] = name;
+				
+			}
+			
+			inputs.close();
+			
+			
+			network.train(inputArray, expected);
+			
+			double[] test = {61.0};
+			
+			network.evaluate(test);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}

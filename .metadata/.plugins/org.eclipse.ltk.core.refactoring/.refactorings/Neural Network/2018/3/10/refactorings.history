@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;CharacterInputs.txt&apos; to &apos;Neural Network&apos;&#x0D;&#x0A;- Original project: &apos;Neural Network&apos;&#x0D;&#x0A;- Destination element: &apos;Neural Network&apos;&#x0D;&#x0A;- Original element: &apos;CharacterInputs.txt&apos;&#x0D;&#x0A;- Update references to refactored element" description="Move file" destination="=Neural Network" element1="src/CharacterInputs.txt" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1520630916520" units="0" version="1.0"/>
+</session>

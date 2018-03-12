@@ -1,0 +1,63 @@
+
+public class Network {
+
+	int hLayers;
+	int numInputs;
+	int numOutputs;
+	
+	Node[] inputs;
+	Node[] outputs;
+	
+	Node[][]nodes;
+	
+	double dataInputs[];
+	double dataOutputs[];
+	double dataLayers[][];
+	
+	public Network(int hLayers, int numInputs, int numOutputs, int numNodes) {
+		
+		this.hLayers = hLayers;
+		this.numInputs = numInputs;
+		this.numOutputs = numOutputs;
+		
+		inputs = new Node[numInputs];
+		dataInputs = new double[numInputs];
+		
+		outputs = new Node[numOutputs];
+		dataOutputs = new double[numOutputs];
+		
+		for(int i = 0; i < numInputs; i++) {
+			inputs[i] = new Node();
+		}
+		
+		for(int i = 0; i < numOutputs; i++) {
+			outputs[i] = new Node();
+		}
+		
+		nodes = new Node[hLayers][numNodes];
+		dataLayers = new double[hLayers][numNodes]; 
+		
+		for(int i = 0; i < hLayers; i++){
+			for(int j = 0; j < numNodes; j++) {
+				nodes[i][j] = new Node();
+			}
+		}
+		
+	}
+	
+	public double[] evaluate(double[] input) {
+		
+		for(int i = 0; i < inputs.length; i++) {
+			inputs[i].evaluate(input[i]);
+			dataInputs[i] = inputs[i].output();
+		}
+		
+		for(int i = 0; i < dataInputs.length; i ++) {
+			System.out.println(i + ": " + dataInputs[i]);
+		}
+		
+		return dataOutputs;
+		
+	}
+	
+}

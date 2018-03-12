@@ -1,0 +1,27 @@
+import java.math.*;
+
+
+public class Node {
+
+	private double weight;
+	private double bias;
+	
+	public Node() {
+		
+		weight = Math.random();
+		bias = Math.random();
+		
+	}
+	
+	public double evaluate(double input) {
+		
+		if(((weight * input) + bias) > 0.5 ) {
+			return 1.0;
+		}
+		else {
+			return 0.0;
+		}
+		
+	}
+	
+}

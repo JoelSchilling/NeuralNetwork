@@ -1,0 +1,26 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		Network network = new Network(3, 1, 3, 100, 1.0);
+		
+		File testData = new File("CharacterInputs.txt");
+		
+		try {
+			Scanner inputs = new Scanner(testData);
+			
+			while(inputs.hasNextLine()) {
+				String character = inputs.nextLine();
+				System.out.println(character);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}

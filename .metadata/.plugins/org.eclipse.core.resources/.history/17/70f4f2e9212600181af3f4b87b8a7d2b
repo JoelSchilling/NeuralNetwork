@@ -1,0 +1,62 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		Network network = new Network(5, 1, 2, 100, 0.1);
+		
+		File testData = new File("CharacterInputs.txt");
+		
+		try {
+			Scanner count = new Scanner(testData);
+			Scanner inputs = new Scanner(testData);
+			
+			int numInputs = 0;
+			
+			while(count.hasNextLine()) {
+				
+				count.nextLine();
+				numInputs++;
+				
+			}
+			
+			double[][] inputArray = new double[numInputs][1];
+			double[][] expected = new double[numInputs][2];
+			
+			for(int i = 0; i < numInputs; i++) {
+				char character = inputs.nextLine().charAt(0);
+				
+				double[] name = {0.0, 0.0};
+				
+				if((int)character > 96) {
+					name[1] = 1.0;
+					
+					if(character == 'a' || character == 'e' || character == 'i' || character == 'o' || character == 'u') {
+						name[0] = 1.0;
+					}
+				}
+				
+				inputArray[i][0] = (double)((int)character);
+				expected[i] = name;
+				
+			}
+			
+			count.close();
+			inputs.close();
+			
+			
+			network.train(inputArray, expected);
+			
+			network.test('a');
+			network.test('j');
+			network.test('P');
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}

@@ -1,0 +1,320 @@
+
+public class Network {
+
+	int hLayers;
+	int numInputs;
+	int numOutputs;
+
+	Node[] inputs;
+	Node[] outputs;
+
+	Node[][]nodes;
+
+	double dataInputs[];
+	double dataOutputs[];
+	double dataLayers[][];
+
+	double learningRate;
+	double currentError;
+	double numCorrect;
+	double total;
+
+	public Network(int hLayers, int numInputs, int numOutputs, int numNodes, double learningRate) {
+
+		this.hLayers = hLayers;
+		this.numInputs = numInputs;
+		this.numOutputs = numOutputs;
+
+		inputs = new Node[numInputs];
+		dataInputs = new double[numInputs];
+
+		outputs = new Node[numOutputs];
+		dataOutputs = new double[numOutputs];
+
+		for(int i = 0; i < numInputs; i++) {
+			inputs[i] = new Node(1);
+		}
+
+		for(int i = 0; i < numOutputs; i++) {
+			outputs[i] = new Node(numNodes);
+		}
+
+		nodes = new Node[hLayers][numNodes];
+		dataLayers = new double[hLayers][numNodes]; 
+
+		for(int i = 0; i < numNodes; i++) {
+			nodes[0][i] = new Node(numInputs);
+		}
+
+
+		for(int i = 1; i < hLayers; i++){
+			for(int j = 0; j < numNodes; j++) {
+				nodes[i][j] = new Node(numNodes);
+			}
+		}
+
+		this.learningRate = learningRate;
+	}
+
+	public double[] evaluate(double[] input) {
+
+		input[0] = ((input[0] - 65.0)/(122.0-65.0)); 
+
+		for(int i = 0; i < inputs.length; i++) {
+			inputs[i].evaluate(input[i], 0);
+			dataInputs[i] = inputs[i].output();
+		}
+
+		for(int i = 0; i < nodes[0].length; i++) {
+			for(int j = 0; j < dataInputs.length; j++) {
+				nodes[0][i].evaluate(dataInputs[j], j);
+			}
+			dataLayers[0][i] = nodes[0][i].output();
+		}
+
+		//Iterate through layers after first layer
+		for(int i = 1; i < nodes.length; i++) {
+
+			//Iterate through nodes of current layer
+			for(int j = 0; j < nodes[i].length; j++) {
+
+				//Iterate through the past inputs to current node
+				for(int k = 0; k < dataLayers[i-1].length; k++) {
+					nodes[i][j].evaluate(dataLayers[i-1][k], k);
+				}
+				dataLayers[i][j] = nodes[i][j].output();
+			}
+		}
+
+		//Iterate through output layer nodes
+		for(int i = 0; i < outputs.length; i++) {
+
+			//Iterate through last outputs from dataLayers
+			for(int j = 0; j < dataLayers[dataLayers.length-1].length; j++) {
+				outputs[i].evaluate(dataLayers[dataLayers.length-1][j], j);
+			}
+
+			dataOutputs[i] = outputs[i].output();
+		}
+
+		dataOutputs = round(dataOutputs);
+
+		/*for(int i = 0; i < dataOutputs.length; i ++) {
+			System.out.println(i + ": " + dataOutputs[i]);
+		}*/
+
+		return dataOutputs;
+
+	}
+
+	public double[] test(char character) {
+
+		double[] input = {(double)((int)character)};
+
+		input[0] = ((input[0] - 65.0)/(122.0-65.0)); 
+
+		System.out.println(input[0]);
+
+		for(int i = 0; i < inputs.length; i++) {
+			inputs[i].evaluate(input[i], 0);
+			dataInputs[i] = inputs[i].output();
+		}
+
+		for(int i = 0; i < nodes[0].length; i++) {
+			for(int j = 0; j < dataInputs.length; j++) {
+				nodes[0][i].evaluate(dataInputs[j], j);
+			}
+			dataLayers[0][i] = nodes[0][i].output();
+		}
+
+		//Iterate through layers after first layer
+		for(int i = 1; i < nodes.length; i++) {
+
+			//Iterate through nodes of current layer
+			for(int j = 0; j < nodes[i].length; j++) {
+
+				//Iterate through the past inputs to current node
+				for(int k = 0; k < dataLayers[i-1].length; k++) {
+					nodes[i][j].evaluate(dataLayers[i-1][k], k);
+				}
+				dataLayers[i][j] = nodes[i][j].output();
+			}
+		}
+
+		//Iterate through output layer nodes
+		for(int i = 0; i < outputs.length; i++) {
+
+			//Iterate through last outputs from dataLayers
+			for(int j = 0; j < dataLayers[dataLayers.length-1].length; j++) {
+				outputs[i].evaluate(dataLayers[dataLayers.length-1][j], j);
+			}
+
+			dataOutputs[i] = outputs[i].output();
+		}
+
+		dataOutputs = round(dataOutputs);
+
+		/*for(int i = 0; i < dataOutputs.length; i ++) {
+			System.out.println(i + ": " + dataOutputs[i]);
+		}*/
+
+		if(dataOutputs[0] == 1.0) {
+			System.out.println("It is a vowel");
+
+			if(dataOutputs[2] == 1.0) {
+				System.out.println("It is capitolized");
+			}
+			else {
+				System.out.println("It is lowercase");
+			}
+
+		}
+		else {
+			if(dataOutputs[0] == 1.0) {
+				System.out.println("It is a vowel");
+
+				if(dataOutputs[1] == 1.0) {
+					System.out.println("It is capitolized");
+				}
+				else {
+					System.out.println("It is lowercase");
+				}
+
+			}
+			else {
+				System.out.println("It is a consonant");
+
+				if(dataOutputs[1] == 1.0) {
+					System.out.println("It is capitolized");
+				}
+				else {
+					System.out.println("It is lowercase");
+				}
+			}
+		}
+		return dataOutputs;
+
+	}
+
+	public double[] round(double[] values) {
+
+		for(int i = 0; i < values.length; i++){
+			if(values[i] < 0.5) {
+				values[i] = 0.0;
+			}
+			else {
+				values[i] = 1.0;
+			}
+		}
+
+		return values;
+
+	}
+
+	public boolean isCorrect(double[] expected) {
+
+		for(int i = 0; i < dataOutputs.length; i++) {
+			if(dataOutputs[i] != expected[i]) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public void calculateError() {
+		currentError = numCorrect/total;
+	}
+
+	public double calculateAccuracy(double error) {
+		return 1.0 - error;
+	}
+
+	public void adjust() {
+
+		for(int i = 0; i < outputs.length; i++) {
+			outputs[i].adjust(currentError, learningRate);
+		}
+
+		for(int i = 0; i < nodes.length; i++) {
+			for(int j = 0; j < nodes[i].length; j++) {
+				nodes[i][j].adjust(currentError, learningRate);
+			}
+		}
+
+		for(int i = 0; i < inputs.length; i++) {
+			inputs[i].adjust(currentError, learningRate);
+		}
+	}
+
+	public void print() {
+		printInputNodes();
+		printHiddenNodes();
+		printOutputNodes();
+	}
+
+	public void printHiddenNodes() {
+		System.out.println("----------Hidden----------");
+		System.out.println();
+		for(int i = 0; i < nodes.length; i++) {
+			System.out.println("----------Hidden Row #" + (i + 1) + "----------");
+			System.out.println();
+			for(int j = 0; j < nodes[i].length; j++) {
+				System.out.println("Hidden Node #" + (j + 1));
+				nodes[i][j].printNode();
+				System.out.println();
+			}
+		}
+	}
+
+	public void printOutputNodes() {
+		System.out.println("----------Outputs----------");
+		System.out.println();
+		for(int i = 0; i < outputs.length; i++) {
+			System.out.println("Output Node #" + (i + 1));
+			outputs[i].printNode();
+			System.out.println();
+		}
+
+	}
+
+	public void printInputNodes() {
+		System.out.println("----------Inputs----------");
+		System.out.println();
+		for(int i = 0; i < inputs.length; i++) {
+			System.out.println("Input Node #" + (i + 1));
+			inputs[i].printNode();
+			System.out.println();
+		}
+	}
+
+	public void train(double[][] train, double[][] expected) {
+
+		int numTimesAccurate = 0;
+		int maxAccurate = 0;
+
+		for(int i = 0; i < train.length; i++) {
+
+			double[] outputs = evaluate(train[i]);
+			total++;
+			if(isCorrect(outputs)) {
+				numCorrect++;
+			}
+
+			double accuracy = calculateAccuracy(currentError);
+			System.out.println("Trial " + i);
+			System.out.println("Accuracy: " + (int)(accuracy * 100) + "%");
+			try {
+				Thread.sleep((long) 5.0);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			adjust();
+
+			System.out.println(maxAccurate + " times in a row!");
+
+		}
+	}
+}
