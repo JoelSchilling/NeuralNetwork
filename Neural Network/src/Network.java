@@ -57,8 +57,9 @@ public class Network {
 	}
 
 	public double[] evaluate(double[] input) {
-
-		input[0] = ((input[0] - 65.0)/(122.0-65.0)); 
+		System.out.println();
+		System.out.println((char)((int)(input[0])));
+		input[0] = ((input[0] - 65.0)/(122.0-65.0) * 100000); 
 
 		for(int i = 0; i < inputs.length; i++) {
 			inputs[i].evaluate(input[i], 0);
@@ -102,7 +103,44 @@ public class Network {
 		/*for(int i = 0; i < dataOutputs.length; i ++) {
 			System.out.println(i + ": " + dataOutputs[i]);
 		}*/
+		
+		if(dataOutputs[0] == 1.0) {
+			System.out.println("It is a vowel");
 
+			if(dataOutputs[1] == 1.0) {
+				System.out.println("It is capitolized");
+			}
+			else {
+				System.out.println("It is lowercase");
+			}
+
+		}
+		else {
+			if(dataOutputs[0] == 1.0) {
+				System.out.println("It is a vowel");
+
+				if(dataOutputs[1] == 1.0) {
+					System.out.println("It is capitolized");
+				}
+				else {
+					System.out.println("It is lowercase");
+				}
+
+			}
+			else {
+				System.out.println("It is a consonant");
+
+				if(dataOutputs[1] == 1.0) {
+					System.out.println("It is capitolized");
+				}
+				else {
+					System.out.println("It is lowercase");
+				}
+			}
+		}
+		
+		System.out.println("Output: " + dataOutputs[0] + " " + dataOutputs[1]);
+		
 		return dataOutputs;
 
 	}
@@ -161,7 +199,7 @@ public class Network {
 		if(dataOutputs[0] == 1.0) {
 			System.out.println("It is a vowel");
 
-			if(dataOutputs[2] == 1.0) {
+			if(dataOutputs[1] == 1.0) {
 				System.out.println("It is capitolized");
 			}
 			else {
@@ -223,7 +261,7 @@ public class Network {
 	}
 
 	public void calculateError() {
-		currentError = numCorrect/total;
+		currentError = (total - numCorrect) / total;
 	}
 
 	public double calculateAccuracy(double error) {
@@ -294,15 +332,19 @@ public class Network {
 
 			evaluate(train[i]);
 			
-			
+			System.out.println("Expected: " + expected[i][0] + " " + expected[i][1]);
 			if(isCorrect(expected[(int) total])) {
 				numCorrect++;
 			}
+			System.out.println("Correct: " + numCorrect);
 			total++;
+			System.out.println("Total: " + total);
 			calculateError();
 			
+			System.out.println("Error: " + currentError);
+			
 			double accuracy = calculateAccuracy(currentError);
-			System.out.println("Trial " + i);
+			//System.out.println("Trial " + i);
 			System.out.println("Accuracy: " + (int)(accuracy * 100) + "%");
 
 			adjust();

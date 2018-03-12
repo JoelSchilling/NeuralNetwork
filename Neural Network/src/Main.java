@@ -7,7 +7,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		Network network = new Network(3, 1, 2, 100, 0.1);
+		Network network = new Network(4, 1, 2, 100, 0.5);
 		
 		File testData = new File("CharacterInputs.txt");
 		
@@ -17,7 +17,7 @@ public class Main {
 			
 			int numInputs = 0;
 			
-			for(int i = 0; i < 10000; i++) {
+			while(count.hasNextLine()) {
 				
 				count.nextLine();
 				numInputs++;
@@ -28,6 +28,7 @@ public class Main {
 			double[][] expected = new double[numInputs][2];
 			
 			for(int i = 0; i < numInputs; i++) {
+				System.out.println(i);
 				char character = inputs.nextLine().charAt(0);
 				
 				double[] name = {0.0, 0.0};
@@ -51,7 +52,7 @@ public class Main {
 				
 			}
 			
-			outputExpected(expected);
+			//outputExpected(expected);
 			
 			count.close();
 			inputs.close();
@@ -77,7 +78,7 @@ public class Main {
 			
 			for(int i = 0; i < expected.length; i++) {
 				for(int j = 0; j < expected[i].length; j++) {
-					writer.println(expected[i]);
+					writer.println(expected[i].toString());
 				}
 				writer.flush();
 			}
