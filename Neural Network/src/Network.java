@@ -260,8 +260,18 @@ public class Network {
 		return true;
 	}
 
-	public void calculateError() {
-		currentError = (total - numCorrect) / total;
+	public void calculateError(double[] outputs, double[] expected) {
+		
+		double error = 0.0;
+		
+		for(int i = 0; i < dataOutputs.length; i++) {
+			error += Math.pow((expected[i] - outputs[i]), 2);
+		}
+		
+		error = error/2;
+		
+		currentError = error;
+		 
 	}
 
 	public double calculateAccuracy(double error) {
@@ -332,14 +342,7 @@ public class Network {
 
 			evaluate(train[i]);
 			
-			System.out.println("Expected: " + expected[i][0] + " " + expected[i][1]);
-			if(isCorrect(expected[(int) total])) {
-				numCorrect++;
-			}
-			System.out.println("Correct: " + numCorrect);
-			total++;
-			System.out.println("Total: " + total);
-			calculateError();
+			calculateError(dataOutputs, expected[i]);
 			
 			System.out.println("Error: " + currentError);
 			

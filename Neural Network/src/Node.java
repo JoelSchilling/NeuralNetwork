@@ -6,6 +6,10 @@ public class Node {
 	private double total;
 	private double numCalc;
 	
+	
+	int direction = 1; 
+	double lastError = 1.0;
+	
 	public Node(int numInputs) {
 		
 		weights = new double[numInputs];
@@ -35,12 +39,12 @@ public class Node {
 		return Math.tanh(calc);
 	}
 
-	public void adjust(double error, double learningRate) {
-		
+	public void adjust(double currentError, double learningRate) {
+		if(lastError < currentError)
+			direction = -direction;
 		for(int i = 0; i < weights.length; i++) {
-			weights[i] = (weights[i] - (learningRate * (error*error/weights[i])));
+			weights[i] = weights[i] - (learningRate * direction * (currentError/weights[i]));
 		}
-		
 	}
 
 	public void printNode() {
